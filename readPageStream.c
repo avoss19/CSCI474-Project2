@@ -26,6 +26,8 @@ void readFile(char* fileName)
 		printf("%d\n", buff[0]);
 	}
 	while (!feof(file));
+	
+	fclose(file);
 }
 
 /*****************************************************************************

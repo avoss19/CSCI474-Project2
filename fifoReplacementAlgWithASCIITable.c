@@ -279,6 +279,92 @@ void printTable(int data[][2], int numOfRows)
 }
 
 /*****************************************************************************
+ * @brief			simulates FIFO replacement algorithm
+ * @author  		Joshua Molden
+ * @date    		5 Nov 21
+ * @lastUpdated 	6 Nov 21
+ * @return  		int (0 if page was found, 1 if page was not found and had to be replace a page)
+ * @arg				page - page that is being requested
+ *					maxSizeOfQueue - the maximum size a queue can be
+ *					currentSizeOfQueue - the current size the queue is
+ *					front - the index to the "front" of the queue (item to be removed if page isn't found)
+ *					rear - the index to the "rear" of the queue (item most recently added)
+ *					queue - the queue holding page numbers
+ * @note    		None
+ *****************************************************************************/
+int fifoAlgorithm(int page, int maxSizeOfQueue, int *currentSizeOfQueue, int *front, int *rear, int queue[])
+{
+	
+	// first page
+	if(*currentSizeOfQueue < 0)
+	{
+		queue[0] = page;
+		*front = *rear = 0;
+		*currentSizeOfQueue = 1;
+		// return 1 to capture that there was a page fault
+		return 1;
+	}
+	else
+	{
+		// this is created so that as we cycle through the array, we aren't changing the actual 
+		// index of the front of the queue. modifyFront will be the next index into the queue to check if
+		// it equals the specified page we are looking for
+		int modifyFront = *front;
+		
+		// cycles through queue looking to see if page is in the queue, if not, put it in the queue
+		for (int i = *currentSizeOfQueue - 1; i >= 0; i--)
+		{
+			// if in queue, return 0 to show there wasn't a page fault
+			if (queue[modifyFront] == page)
+			{
+				return 0;
+			}
+			else if (i != 0)	// if we haven't cycled through the queue yet, do this 
+			{
+				// if next index will be an illegal bound, set it to the "0th" index
+				if (modifyFront + 1 == maxSizeOfQueue)
+				{
+					modifyFront = 0;
+				}
+				else	// else, set next index to modifyFront + 1
+				{
+					modifyFront++;
+				}
+				// continue to next iteration of for loop since the page wasn't found and we haven't cycled
+				// through the queue yet
+				continue;
+			}
+			else	// cycled through queue and page not found
+			{
+				// if this is true, front is set to the last legal index, so set the front back to the "0th" index
+				if (*front == maxSizeOfQueue - 1)
+				{
+					*rear = *front;
+					*front =  0;
+					// replace page in "front" of queue with the page number
+					queue[*front] = page;
+				}
+				else if (*currentSizeOfQueue != maxSizeOfQueue) // this takes care of fully populating the queue before trying to replace pages already in the queue or adding the same page twice
+				{
+					queue[*rear + 1] = page;
+					*rear = *rear + 1;
+					*currentSizeOfQueue = *currentSizeOfQueue + 1;
+				}
+				else	// normal replacement that adjusts front and pack accordingly
+				{
+					*rear = *front;
+					queue[*front + 1] = page;
+					*front = *front + 1;
+				}
+				// return 1 to indicate there was a page fault
+				return 1;
+			}
+		}
+	}
+	
+}
+
+/*****************************************************************************
  * @brief			reads values in from command line, makes random page stream for testing, creates
  *					data array based on inputed parameters
  * @author  		Joshua Molden
@@ -288,7 +374,7 @@ void printTable(int data[][2], int numOfRows)
  * @arg				argc - number of command line arguments passed in, including name of program
  *              	argv - the actual arguments
  *						argv[0] = name of program
- *						argv[1] = input file, not sure what this is for?
+ *						argv[1] = input file from which page stream should be read from. Need to make this file yet
  *						argv[2] = minimum number of frames to test replacement algorithm with (always 4 for this assignment)
  *						argv[3] = maximun number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
  *						argv[4] = number of pages in process (15, 30, 60 for this assignment)
@@ -308,23 +394,9 @@ int main(int argc, char** argv) {
 	int maxNumOfFramesInt = atoi(maxNumOfFrames);
 	int	numPagesPerProcessInt = atoi(numPagesPerProcess);
 	
-	// 1000 was said to be sufficient by professor Latimer
-	int lengthOfPageStream = 1000;
-	int pageAddressStream[lengthOfPageStream];
-	
 	// number of rows of data. Also number of rows of data in ascii table
 	int rows = maxNumOfFramesInt - minNumOfFramesInt;
 	int data[rows][2];
-	
-	// use number of pages for the seed of the page stream
-	srand(numPagesPerProcessInt);
-	
-	// create page request stream
-	for (int i = 0; i < lengthOfPageStream; ++i)
-	{
-		int page = ((int) rand() % numPagesPerProcessInt);
-		pageAddressStream[i] = page;
-	}
 	
 	// populate from numbers in data array, may delete this later
 	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; ++i) 
@@ -337,13 +409,34 @@ int main(int argc, char** argv) {
 		data[i - minNumOfFramesInt][1] = 0;
 	}
 	
-	/* for testing
-	*/
-	data[0][1] = 48;
-	data[1][1] = 100;
-	data[2][1] = 1000;
-	data[3][1] = 10000;
-	
+	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; i++)
+	{		
+		FILE *file;
+		file = fopen(inputFile, "r");
+		// holds number that is read from file
+		int buff[1];
+		
+		// not end of file to start
+		int endOfFile = 1;
+		
+		int queue[i];
+		int front = -1;
+		int rear = -1;
+		int currentSizeOfQueue = -1;
+		
+		int numOfFaults = 0;
+		
+		do
+		{
+			// read int from line. fscanf retruns 0 if successfully read
+			int succRead = fscanf(file, "%d", buff);
+			numOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
+			data[i - 4][1] = numOfFaults;
+		}
+		while (!feof(file));
+		
+		fclose(file);
+	}
 	
 	printTable(data, rows);
 	
