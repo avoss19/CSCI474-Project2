@@ -15,10 +15,10 @@ void readFile(char* fileName)
 	file = fopen(fileName, "r");
 	// holds number that is read from file
 	int buff[1];
-	
+
 	// not end of file to start
 	int endOfFile = 1;
-	
+
 	do
 	{
 		// read int from line. fscanf retruns 0 if successfully read
@@ -26,7 +26,7 @@ void readFile(char* fileName)
 		printf("%d\n", buff[0]);
 	}
 	while (!feof(file));
-	
+
 	fclose(file);
 }
 
@@ -36,10 +36,10 @@ void readFile(char* fileName)
  * @date    		5 Nov 21
  * @lastUpdated 	5 Nov 21
  * @return  		int (0 if exited normally, non-zero if issues)
- * @arg				argc - number of command line arguments passed in, including name of program
+ * @arg			argc - number of command line arguments passed in, including name of program
  *              	argv - the actual arguments
- *						argv[0] - name of program
- *						argv[1] = name of file to read. Include the extension of the file you want to read
+ *				argv[0] - name of program
+ *				argv[1] = name of file to read. Include the extension of the file you want to read
  * @note    		None
  *****************************************************************************/
 int main(int argc, char** argv) {
