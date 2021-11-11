@@ -255,9 +255,8 @@ void printTable(int data[][2], int numOfRows)
 }
 
 
-
 /*****************************************************************************
- * @brief                       Updates circular frame buffer to next position
+ * @brief               Updates circular frame buffer to next position
  * @author              Dylan Martie
  * @date                5 Nov 21
  * @lastUpdated         5 Nov 21
@@ -278,7 +277,71 @@ int updatePointer(int pointer, int frameSize) {
 }
 
 /*****************************************************************************
- * @brief                       Performs Clock replacement Algorithm with associated page request stream
+ * @brief               Simulates clock replacement algorithm
+ * @author              Dylan Martie
+ * @date                5 Nov 21
+ * @lastUpdated         10 Nov 21
+ * @return              int (0 if page was found, 1 if page was not found and had to be replace a page)
+ * @arg                         pageRequest - page that is being requested
+ *                              frameBuffer[] - the predetermined sized array for holder stored frame values
+ *                              frameUseBits[] - the predetermined sized array for holding use bit value of each frame
+ *                              numFrames - number of frames
+ *                              framePointer - Pointer that keeps track of where we are in framebuffer
+ * @note                None
+ *****************************************************************************/
+int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int numFrames, int* framePointer) {
+
+        bool pageFound = false;
+        int numPageFaults = 0;
+        int index = *framePointer;
+
+        // Searches buffer for page
+        for (int i = 0; i < numFrames; i++) {
+
+                if (frameBuffer[i] == pageRequest) {
+                        pageFound = true;
+                        frameUseBits[i] = 1;
+                        break;
+                }
+        }
+
+        // If page not found, start replacement algorithm
+        if (!pageFound) {
+                numPageFaults += 1;
+                bool pageReplaced = false;
+
+                // Clock Algorithm
+                // Finds first frame with use bits of 0, changing each frame passed form 1 to 0
+                for (int j = 0; j < numFrames; j++) {
+
+                        if (frameUseBits[index] == 0) {
+                                frameBuffer[index] = pageRequest;
+                                frameUseBits[index] = 1;
+                                pageReplaced = true;
+                                break;
+                        }
+                        else {
+                                frameUseBits[index] = 0;
+                        }
+                        index = updatePointer(index, numFrames);
+
+                }
+                // If none found, starting point frame replaced
+                if (!pageReplaced) {
+                        frameBuffer[index] = pageRequest;
+                        frameUseBits[index] = 1;
+                        index = updatePointer(index, numFrames);
+                }
+        }
+        *framePointer = index;
+
+        return numPageFaults;
+}
+
+
+
+/*****************************************************************************
+ * @brief                       Reads values in from command line, taking in random stream of page requests for testing and outputs ASCII table
  * @author              Dylan Martie
  * @date                5 Nov 21
  * @lastUpdated         6 Nov 21
@@ -319,6 +382,7 @@ int main(int argc, char** argv) {
                 // Memset ensures all values initialized to -1
                 int frameBuffer[numFrames];
                 memset(frameBuffer, -1, numFrames*sizeof(int));
+
                 int frameUseBits[numFrames];
                 memset(frameUseBits, -1, numFrames*sizeof(int));
 
@@ -326,56 +390,19 @@ int main(int argc, char** argv) {
                 int numPageFaults = 0;
 
                 FILE *file = fopen(inputFile, "r");
+
+                // Read in each Page Request and call clockAlgorithm function
                 for (int j = 0; j < 1000; j++) {
 
                         int buff[1];
-                        bool pageFound = false;
                         fscanf(file, "%d", buff);
                         int pageRequest = buff[0];
 
-                        // Searches buffer for page
-                        for (int k = 0; k < numFrames; k++) {
-
-                                if (frameBuffer[k] == pageRequest){
-                                        pageFound = true;
-                                        frameUseBits[k] = 1;
-                                        break;
-                                }
-                        }
-                        // If page not found, start replacement algorithm
-                        if (!pageFound) {
-                                numPageFaults += 1;
-                                bool pageReplaced = false;
-
-                                // Clock Algorithm
-                                // Finds first frame with use bits of 0, changing each frame passed from 1 to 0
-                                for (int m = 0; m < numFrames; m++) {
-
-                                        if (frameUseBits[framePointer] == 0){
-                                                frameBuffer[framePointer] = pageRequest;
-                                                frameUseBits[framePointer] = 1;
-                                                pageReplaced = true;
-                                                break;
-                                        }
-                                        else {
-                                                frameUseBits[framePointer] = 0;
-                                        }
-                                        framePointer = updatePointer(framePointer, numFrames);
-
-                                }
-                                // If none found, starting point frame replaced
-                                if (!pageReplaced) {
-                                        frameBuffer[framePointer] = pageRequest;
-                                        frameUseBits[framePointer] = 1;
-                                        framePointer = updatePointer(framePointer, numFrames);
-                                }
-                        }
+                        numPageFaults += clockAlgorithm(pageRequest, frameBuffer, frameUseBits, numFrames, &framePointer);
 
                 }
 
                 fclose(file);
-                //printf("Number of Frames: %d\n", numFrames);
-                //printf("Number of Page Faults: %d\n", numPageFaults);
 
                 totalFaults[counter][0] = numFrames;
                 totalFaults[counter][1] = numPageFaults;
@@ -386,5 +413,6 @@ int main(int argc, char** argv) {
         printTable(totalFaults, rows);
 
 }
+
 
 
