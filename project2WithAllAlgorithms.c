@@ -563,7 +563,7 @@ int main(int argc, char** argv) {
 	}
 	
 	/* print to file in order to make it easier to copy to excel spreadsheet
-	*/
+	
 	char fifoOutput[50], clockOutput[50], optimalOutput[50];
 	strcat(fifoOutput, "fifoOutput");
 	strcat(fifoOutput, maxNumOfFrames);
@@ -580,7 +580,7 @@ int main(int argc, char** argv) {
 	//printResultsToFile(optimalFaults, rows, optimalOutput);
 	printResultsToFile(fifoFaults, rows, fifoOutput);
 	printResultsToFile(clockFaults, rows, clockOutput);
-
+	*/
 	
 	//printTable(optimalFaults, rows, "OPT");
 	printTable(fifoFaults, rows, "FIFO");
