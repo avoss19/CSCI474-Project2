@@ -464,7 +464,7 @@ void printResultsToFile(int results[][2], int numOfRows, char* fileName)
 	
 	// create "numOfPagesInStreamInt" number of page numbers as ints between 0 and pagesInt
 	for (int i = 0; i <= numOfRows; ++i) {
-		fprintf(file, "%d\t", results[i][0]);
+		fprintf(file, "%d,", results[i][0]);
 		fprintf(file, "%d\n", results[i][1]);
 	}
 
@@ -554,7 +554,6 @@ int main(int argc, char** argv) {
 					int succRead = fscanf(file, "%d", buff);
 					fifoNumOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
 					clockNumOfFaults += clockAlgorithm(buff[0], clockFrameBuffer, clockFrameUseBits, clockNumFrames, &clockFramePointer);
-
 			}
 			while (!feof(file));
 
@@ -564,24 +563,25 @@ int main(int argc, char** argv) {
 	}
 	
 	/* print to file in order to make it easier to copy to excel spreadsheet
+	*/
 	char fifoOutput[50], clockOutput[50], optimalOutput[50];
 	strcat(fifoOutput, "fifoOutput");
 	strcat(fifoOutput, maxNumOfFrames);
-	strcat(fifoOutput, ".txt");
+	strcat(fifoOutput, ".csv");
 	
 	strcat(clockOutput, "clockOutput");
 	strcat(clockOutput, maxNumOfFrames);
-	strcat(clockOutput, ".txt");
+	strcat(clockOutput, ".csv");
 	
 	//strcat(optimalOutput, "optimalOutput");
 	//strcat(optimalOutput, maxNumOfFrames);
-	//strcat(optimalOutput, ".txt");
-
+	//strcat(optimalOutput, ".csv");
+	
 	//printResultsToFile(optimalFaults, rows, optimalOutput);
 	printResultsToFile(fifoFaults, rows, fifoOutput);
 	printResultsToFile(clockFaults, rows, clockOutput);
-	*/
 
+	
 	//printTable(optimalFaults, rows, "OPT");
 	printTable(fifoFaults, rows, "FIFO");
 	printTable(clockFaults, rows, "CLOCK");
