@@ -338,17 +338,17 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	// Store the index position of the least recently used page in "index"
 	for (int i = 0; i < frameSetSize; i++)
 	{
-		int diff = diffTime(timeStamps[i], now);
+		int diff = difftime(timeStamps[i], now);
 		if (diff >= max) continue;
 		max = diff;
 		index = i;
 	}
 
 	// Replace the page at the selected index position
-	time_t now;
-	time(&now);
+	time_t current;
+	time(&current);
 	frameSet[index] = page;
-	timeStamps[index] = now;
+	timeStamps[index] = current;
 	return 1;
 
 }
@@ -418,9 +418,9 @@ int main(int argc, char** argv) {
 			// read int from line. fscanf retruns 0 if successfully read
 			int succRead = fscanf(file, "%d", buff);
 			numOfFaults += lruAlgorithm(buff[0], i, &currentFrameSetSize, frameSet, timestamps);
-			data[i - 4][1] = numOfFaults;
 		}
 		while (!feof(file));
+		data[i - 4][1] = numOfFaults;
 
 		fclose(file);
 	}
