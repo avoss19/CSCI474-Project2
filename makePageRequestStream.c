@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 /*****************************************************************************
  * @brief		reads values in from command line, makes random page stream
@@ -41,8 +42,8 @@ int main(int argc, char** argv) {
 	file = fopen(fileToCreate, "a");
 
 	// use pagesInt for seeder
-	srand(pagesInt);
-
+	// srand(pagesInt);
+	srand(time(NULL));
 	// create "numOfPagesInStreamInt" number of page numbers as ints between 0 and pagesInt
 	for (unsigned long i = 0; i < numOfPagesInStreamInt; ++i) {
 		// random number between 0 inclusive and "pagesInt" exclusive
