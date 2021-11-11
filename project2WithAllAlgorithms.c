@@ -447,6 +447,32 @@ int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int n
 }
 
 /*****************************************************************************
+ * @brief               prints contents of results array to a file
+ * @author              Joshua Molden
+ * @date                11 Nov 21
+ * @lastUpdated         11 Nov 21
+ * @return              void (prints to file)
+ * @arg                 results - array holding values to print to file
+ *						numOfRows - number of rows to print to file
+ *						fileName - the name of the file to create
+ * @note                Simulates FIFO replacement algorithm and prints results in ASCII table
+ *****************************************************************************/
+void printResultsToFile(int results[][2], int numOfRows, char* fileName)
+{
+	FILE *file;
+	file = fopen(fileName, "a");
+	
+	// create "numOfPagesInStreamInt" number of page numbers as ints between 0 and pagesInt
+	for (int i = 0; i <= numOfRows; ++i) {
+		fprintf(file, "%d\t", results[i][0]);
+		fprintf(file, "%d\n", results[i][1]);
+	}
+
+	// close file that was appended to
+	fclose(file);
+}
+
+/*****************************************************************************
  * @brief               reads values in from command line, makes random page stream for testing, creates
  *                      data array based on inputed parameters
  * @author              Joshua Molden
@@ -464,81 +490,101 @@ int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int n
  *****************************************************************************/
 int main(int argc, char** argv) {
 
-        // read inputs from command line as strings
-        char* inputFile = argv[1];
-        char* minNumOfFrames = argv[2];
-        char* maxNumOfFrames = argv[3];
-        char* numPagesPerProcess = argv[4];
+	// read inputs from command line as strings
+	char* inputFile = argv[1];
+	char* minNumOfFrames = argv[2];
+	char* maxNumOfFrames = argv[3];
+	char* numPagesPerProcess = argv[4];
 
-        // convert from string to number
-        int minNumOfFramesInt = atoi(minNumOfFrames);
-        int maxNumOfFramesInt = atoi(maxNumOfFrames);
-        int numPagesPerProcessInt = atoi(numPagesPerProcess);
+	// convert from string to number
+	int minNumOfFramesInt = atoi(minNumOfFrames);
+	int maxNumOfFramesInt = atoi(maxNumOfFrames);
+	int numPagesPerProcessInt = atoi(numPagesPerProcess);
 
-        // number of rows of data. Also number of rows of data in ascii table
-        int rows = maxNumOfFramesInt - minNumOfFramesInt;
+	// number of rows of data. Also number of rows of data in ascii table
+	int rows = maxNumOfFramesInt - minNumOfFramesInt;
 	int clockFaults[rows][2];
-        int fifoFaults[rows][2];
+	int fifoFaults[rows][2];
 
-        // populate from numbers in arrays
-        for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; ++i)
-        {
-                // initalize frame values, subtrack "minNumOfFramesInt" in
-                // order to start putting values into array at index 0
-                fifoFaults[i - minNumOfFramesInt][0] = i;
-		clockFaults[i - minNumOfFramesInt][0] = i;
-                // initialize fault values to 0, same reason for subtracking "minNumOfFramesInt"
-                // initialize to 0 because if you don't these cells don't start at 0 by default for some reason
-                fifoFaults[i - minNumOfFramesInt][1] = 0;
-		clockFaults[i - minNumOfFramesInt][1] = 0;
-        }
+	// populate from numbers in arrays
+	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; ++i)
+	{
+			// initalize frame values, subtrack "minNumOfFramesInt" in
+			// order to start putting values into array at index 0
+			fifoFaults[i - minNumOfFramesInt][0] = i;
+			clockFaults[i - minNumOfFramesInt][0] = i;
+			// initialize fault values to 0, same reason for subtracking "minNumOfFramesInt"
+			// initialize to 0 because if you don't these cells don't start at 0 by default for some reason
+			fifoFaults[i - minNumOfFramesInt][1] = 0;
+			clockFaults[i - minNumOfFramesInt][1] = 0;
+	}
 
-        for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; i++)
-        {
-                FILE *file;
-                file = fopen(inputFile, "r");
-                // holds number that is read from file
-                int buff[1];
+	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; i++)
+	{
+			FILE *file;
+			file = fopen(inputFile, "r");
+			// holds number that is read from file
+			int buff[1];
 
-                // not end of file to start
-                int endOfFile = 1;
+			// not end of file to start
+			int endOfFile = 1;
 
-		// for fifo algorithm
-                int queue[i];
-                int front = -1;
-                int rear = -1;
-                int currentSizeOfQueue = -1;
+			// for fifo algorithm
+			int queue[i];
+			int front = -1;
+			int rear = -1;
+			int currentSizeOfQueue = -1;
 
-		// for clock algorithm
-		int clockNumFrames = i;
-		// Memset ensures all values initialized to -1
-                int clockFrameBuffer[clockNumFrames];
-                memset(clockFrameBuffer, -1, clockNumFrames*sizeof(int));
-                int clockFrameUseBits[clockNumFrames];
-                memset(clockFrameUseBits, -1, clockNumFrames*sizeof(int));
+			// for clock algorithm
+			int clockNumFrames = i;
+			// Memset ensures all values initialized to -1
+			int clockFrameBuffer[clockNumFrames];
+			memset(clockFrameBuffer, -1, clockNumFrames*sizeof(int));
+			int clockFrameUseBits[clockNumFrames];
+			memset(clockFrameUseBits, -1, clockNumFrames*sizeof(int));
 
-                int clockFramePointer = 0;
+			int clockFramePointer = 0;
 
-                int fifoNumOfFaults = 0;
-		int clockNumOfFaults = 0;
+			int fifoNumOfFaults = 0;
+			int clockNumOfFaults = 0;
 
-                do
-                {
-                        // read int from line. fscanf retruns 0 if successfully read
-                        int succRead = fscanf(file, "%d", buff);
-                        fifoNumOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
-			clockNumOfFaults += clockAlgorithm(buff[0], clockFrameBuffer, clockFrameUseBits, clockNumFrames, &clockFramePointer);
+			do
+			{
+					// read int from line. fscanf retruns 0 if successfully read
+					int succRead = fscanf(file, "%d", buff);
+					fifoNumOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
+					clockNumOfFaults += clockAlgorithm(buff[0], clockFrameBuffer, clockFrameUseBits, clockNumFrames, &clockFramePointer);
 
-                }
-                while (!feof(file));
+			}
+			while (!feof(file));
 
-		fifoFaults[i - 4][1] = fifoNumOfFaults;
-		clockFaults[i - 4][1] = clockNumOfFaults;
-                fclose(file);
-        }
+			fifoFaults[i - 4][1] = fifoNumOfFaults;
+			clockFaults[i - 4][1] = clockNumOfFaults;
+			fclose(file);
+	}
+	
+	/* print to file in order to make it easier to copy to excel spreadsheet
+	char fifoOutput[50], clockOutput[50], optimalOutput[50];
+	strcat(fifoOutput, "fifoOutput");
+	strcat(fifoOutput, maxNumOfFrames);
+	strcat(fifoOutput, ".txt");
+	
+	strcat(clockOutput, "clockOutput");
+	strcat(clockOutput, maxNumOfFrames);
+	strcat(clockOutput, ".txt");
+	
+	//strcat(optimalOutput, "optimalOutput");
+	//strcat(optimalOutput, maxNumOfFrames);
+	//strcat(optimalOutput, ".txt");
 
-        printTable(fifoFaults, rows, "FIFO");
+	//printResultsToFile(optimalFaults, rows, optimalOutput);
+	printResultsToFile(fifoFaults, rows, fifoOutput);
+	printResultsToFile(clockFaults, rows, clockOutput);
+	*/
+
+	//printTable(optimalFaults, rows, "OPT");
+	printTable(fifoFaults, rows, "FIFO");
 	printTable(clockFaults, rows, "CLOCK");
 
-        return 0;
+	return 0;
 }
