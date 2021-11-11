@@ -289,42 +289,42 @@ void printTable(int data[][2], int numOfRows)
  *		    	currentFrameSetSize - the current number of frames being used
  *			    frameSet - the set of frames holding page numbers
  *			    timeStamps - an array of times corresponding to the last time each page was recently used
- * @note    	I have no idea how to use pointer variables
+ * @note    	None
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
 	// First page; add it to the frame set and return that there was a page fault
-	if (currentFrameSetSize == 0)
+	if (*currentFrameSetSize == 0)
 	{
 		time_t now;
 		time(&now);
-		frameSet[currentFrameSetSize] = page;
-		timeStamps[currentFrameSetSize] = now;
-		currentFrameSetSize++;
+		frameSet[*currentFrameSetSize] = page;
+		timeStamps[*currentFrameSetSize] = now;
+		*currentFrameSetSize++;
 		return 1;
 	}
 
 	// Check to see if the page is already loaded into a frame
 	int pageFault = 0;
-	for (int i = 0; i < currentFrameSetSize; i++) {
+	for (int i = 0; i < *currentFrameSetSize; i++) {
 		if (frameSet[i] == page)
 		{
 			// Update the timestamp corresponding to that page
 			time_t now;
 			time(&now);
-			timeStamps[currentFrameSetSize] = now;
+			timeStamps[*currentFrameSetSize] = now;
 			return 0;
 		}
 	}
 
 	// If there is room, load the page into an empty frame
-	if (currentFrameSetSize < frameSetSize)
+	if (*currentFrameSetSize < frameSetSize)
 	{
 		time_t now;
 		time(&now);
-		frameSet[currentFrameSetSize] = page;
-		timeStamps[currentFrameSetSize] = now;
-		currentFrameSetSize++;
+		frameSet[*currentFrameSetSize] = page;
+		timeStamps[*currentFrameSetSize] = now;
+		*currentFrameSetSize++;
 		return 1;
 
 	}
@@ -408,10 +408,9 @@ int main(int argc, char** argv) {
 		// not end of file to start
 		int endOfFile = 1;
 
-		int queue[i];
-		int front = -1;
-		int rear = -1;
-		int currentSizeOfQueue = -1;
+		int frameSet[i];
+		time_t timestamps[i];
+		int currentFrameSetSize = 0;
 
 		int numOfFaults = 0;
 
@@ -419,7 +418,7 @@ int main(int argc, char** argv) {
 		{
 			// read int from line. fscanf retruns 0 if successfully read
 			int succRead = fscanf(file, "%d", buff);
-			numOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
+			numOfFaults += fifoAlgorithm(buff[0], i, &currentFrameSetSize, queue, timestamps);
 			data[i - 4][1] = numOfFaults;
 		}
 		while (!feof(file));
