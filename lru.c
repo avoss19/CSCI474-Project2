@@ -16,7 +16,7 @@
 *       This ascii table is not very flexible; if you use it incorrectly,
 *	the table will not print correctly. We can make it more robust if we want to.
 *
-* AUTHOR :    Joshua Molden       START DATE :    3 Nov 21
+* AUTHOR :    Meagan Olson and Joshua Molden       START DATE :    3 Nov 21
 *
 * VERSION:
 *	1.0.0
@@ -305,7 +305,6 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	}
 
 	// Check to see if the page is already loaded into a frame
-	int pageFault = 0;
 	for (int i = 0; i < *currentFrameSetSize; i++) {
 		if (frameSet[i] == page)
 		{
@@ -340,7 +339,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	for (int i = 0; i < frameSetSize; i++)
 	{
 		int diff = diffTime(timeStamps[i], now);
-		if (diff < max) continue;
+		if (diff >= max) continue;
 		max = diff;
 		index = i;
 	}
@@ -418,7 +417,7 @@ int main(int argc, char** argv) {
 		{
 			// read int from line. fscanf retruns 0 if successfully read
 			int succRead = fscanf(file, "%d", buff);
-			numOfFaults += fifoAlgorithm(buff[0], i, &currentFrameSetSize, queue, timestamps);
+			numOfFaults += lruAlgorithm(buff[0], i, &currentFrameSetSize, frameSet, timestamps);
 			data[i - 4][1] = numOfFaults;
 		}
 		while (!feof(file));
