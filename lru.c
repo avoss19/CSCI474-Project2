@@ -1,20 +1,18 @@
 /*H**********************************************************************
-* FILENAME : asciiTable.c
+* FILENAME : lru.c
 *
-* DESCRIPTION :
-*       This file prints an ascii table for data in a 2 dimensional array and a specified
-*	number of rows that is taken from the command line
+* DESCRIPTION : Simulates the Least Recently Used page replacement algorithm and prints out an ASCII table
+*				showing the number of frames used and the number of page faults in each round
 *
 * PUBLIC FUNCTIONS :
-*       void 	spacers( int columnWidth )
-*	void	topAndBottom( int totalWidth )
-*	void 	printData( int data[][2], int columnWidth, int numOfRows, int totalWidth )
-*	void 	printTable( int data[][2], int numOfRows )
-*       int     main( int argc, char** argv )
+*       	void 	spacers( int columnWidth )
+*			void	topAndBottom( int totalWidth )
+*			void 	printData( int data[][2], int columnWidth, int numOfRows, int totalWidth )
+*			void 	printTable( int data[][2], int numOfRows )
+*			int		lruAlgorithm( int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
+*       	int     main( int argc, char** argv )
 *
-* NOTES :
-*       This ascii table is not very flexible; if you use it incorrectly,
-*	the table will not print correctly. We can make it more robust if we want to.
+* NOTES :	None
 *
 * AUTHOR :    Meagan Olson and Joshua Molden       START DATE :    3 Nov 21
 *
@@ -22,7 +20,7 @@
 *	1.0.0
 *
 * LAST UPDATED:
-*	4 Nov 21
+*	11 Nov 21
 *H*/
 
 #include <stdio.h>
@@ -200,7 +198,7 @@ void printData(int data[][2], int columnWidth, int numOfRows, int totalWidth)
 void printTable(int data[][2], int numOfRows)
 {
 	// array for header of table. Can replace algorithm name (i.e "FIFO") and it will center itself
-	char* tableHeader[2] = {"Replacement Algorithm", "FIFO"};
+	char* tableHeader[2] = {"Replacement Algorithm", "LRU"};
 
 	// needed to center the headers dynamically
 	int sizeOfLine1 = strlen(tableHeader[0]);
@@ -279,28 +277,30 @@ void printTable(int data[][2], int numOfRows)
 }
 
 /*****************************************************************************
- * @brief		simulates LRU replacement algorithm
+ * @brief			simulates LRU replacement algorithm
  * @author  		Meagan Olson
  * @date    		10 Nov 21
  * @lastUpdated 	11 Nov 21
  * @return  		int (0 if page was found, 1 if page was not found and a page had to be replaced)
- * @arg			page - page that is being requested
- *			    frameSetSize - the maximum number of frames being used
- *		    	currentFrameSetSize - the current number of frames being used
- *			    frameSet - the set of frames holding page numbers
- *			    timeStamps - an array of times corresponding to the last time each page was recently used
- * @note    	None
+ * @arg				page - page that is being requested
+ *			    	frameSetSize - the maximum number of frames being used
+ *		    		currentFrameSetSize - the current number of frames being used
+ *			    	frameSet - the set of frames holding page numbers
+ *			    	timeStamps - an array of times corresponding to the last time each page was recently used
+ * @note    		None
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
+	if (frameSetSize == 30) printf("\nPage requested: %d", page);
 	// First page; add it to the frame set and return that there was a page fault
 	if (*currentFrameSetSize == 0)
 	{
 		time_t now;
 		time(&now);
-		frameSet[*currentFrameSetSize] = page;
-		timeStamps[*currentFrameSetSize] = now;
-		*currentFrameSetSize++;
+		frameSet[0] = page;
+		timeStamps[0] = now;
+		*currentFrameSetSize = 1;
+		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", 0);
 		return 1;
 	}
 
@@ -311,7 +311,8 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 			// Update the timestamp corresponding to that page
 			time_t now;
 			time(&now);
-			timeStamps[*currentFrameSetSize] = now;
+			timeStamps[i] = now;
+			if (frameSetSize == 30) printf("\t\tFound\tIndex: %d", i);
 			return 0;
 		}
 	}
@@ -323,32 +324,34 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		time(&now);
 		frameSet[*currentFrameSetSize] = page;
 		timeStamps[*currentFrameSetSize] = now;
-		*currentFrameSetSize++;
+		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", *currentFrameSetSize);
+		*currentFrameSetSize += 1;
 		return 1;
 
 	}
 
 	// Find the least recently used page and replace it
 	int max = 0;
-	time_t now;
-	time(&now);
+	time_t current;
+	time(&current);
 	int index = 0;
 
 	// Find the max time difference between now and the timestamps in the array
 	// Store the index position of the least recently used page in "index"
 	for (int i = 0; i < frameSetSize; i++)
 	{
-		int diff = difftime(timeStamps[i], now);
-		if (diff >= max) continue;
+		int diff = difftime(timeStamps[i], current);
+		if (diff <= max) continue;
 		max = diff;
 		index = i;
 	}
 
 	// Replace the page at the selected index position
-	time_t current;
-	time(&current);
+	time_t now;
+	time(&now);
 	frameSet[index] = page;
-	timeStamps[index] = current;
+	timeStamps[index] = now;
+	if (frameSetSize == 30) printf("\t\tReplaced\tIndex: %d", index);
 	return 1;
 
 }
@@ -356,18 +359,18 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 /*****************************************************************************
  * @brief		reads values in from command line, makes random page stream for testing, creates
  *			data array based on inputed parameters
- * @author  		Joshua Molden
+ * @author  		Joshua Molden, Meagan Olson
  * @date    		3 Nov 21
- * @lastUpdated 	4 Nov 21
+ * @lastUpdated 	11 Nov 21
  * @return  		int (0 if exited normally, non-zero if issues)
  * @arg			argc - number of command line arguments passed in, including name of program
  *              	argv - the actual arguments
  *				argv[0] = name of program
  *				argv[1] = input file from which page stream should be read from. Need to make this file yet
  *				argv[2] = minimum number of frames to test replacement algorithm with (always 4 for this assignment)
- *				argv[3] = maximun number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
+ *				argv[3] = maximum number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
  *				argv[4] = number of pages in process (15, 30, 60 for this assignment)
- * @note    		Simulates FIFO replacement algorithm and prints results in ASCII table
+ * @note    		Simulates LRU replacement algorithm and prints results in ASCII table
  *****************************************************************************/
 int main(int argc, char** argv) {
 
@@ -415,7 +418,7 @@ int main(int argc, char** argv) {
 
 		do
 		{
-			// read int from line. fscanf retruns 0 if successfully read
+			// read int from line. fscanf returns 0 if successfully read
 			int succRead = fscanf(file, "%d", buff);
 			numOfFaults += lruAlgorithm(buff[0], i, &currentFrameSetSize, frameSet, timestamps);
 		}
