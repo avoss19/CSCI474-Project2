@@ -1,29 +1,29 @@
 /*H**********************************************************************
-* FILENAME : asciiTable.c
-*
-* DESCRIPTION :
-*       This file prints an ascii table for data in a 2 dimensional array and a specified
-*       number of rows that is taken from the command line
-*
-* PUBLIC FUNCTIONS :
-*       void    spacers( int columnWidth )
-*       void    topAndBottom( int totalWidth )
-*       void    printData( int data[][2], int columnWidth, int numOfRows, int totalWidth )
-*       void    printTable( int data[][2], int numOfRows )
-*       int     main( int argc, char** argv )
-*
-* NOTES :
-*       This ascii table is not very flexible, if you use it incorrectly,
-*       the table will not print correctly. We can make it more robust if we want to.
-*
-* AUTHOR :    Joshua Molden       START DATE :    3 Nov 21
-*
-* VERSION:
-*       1.0.0
-*
-* LAST UPDATED:
-*       4 Nov 21
-*H*/
+ * FILENAME : asciiTable.c
+ *
+ * DESCRIPTION :
+ *       This file prints an ascii table for data in a 2 dimensional array and a specified
+ *       number of rows that is taken from the command line
+ *
+ * PUBLIC FUNCTIONS :
+ *       void    spacers( int columnWidth )
+ *       void    topAndBottom( int totalWidth )
+ *       void    printData( int data[][2], int columnWidth, int numOfRows, int totalWidth )
+ *       void    printTable( int data[][2], int numOfRows )
+ *       int     main( int argc, char** argv )
+ *
+ * NOTES :
+ *       This ascii table is not very flexible, if you use it incorrectly,
+ *       the table will not print correctly. We can make it more robust if we want to.
+ *
+ * AUTHOR :    Joshua Molden       START DATE :    3 Nov 21
+ *
+ * VERSION:
+ *       1.0.0
+ *
+ * LAST UPDATED:
+ *       4 Nov 21
+ * H*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,15 +31,15 @@
 #include <stdbool.h>
 
 /*****************************************************************************
- * @brief               prints out spacers between rows
- * @author              Joshua Molden
- * @date                3 Nov 21
- * @lastUpdated         4 Nov 21
- * @return              void (prints to command line)
- * @arg                 columnWidth - the width of both columns
- * @note                This method doesn't allow for different width of columns.
- *                      If this is desired, this method will have to be changed.
- *****************************************************************************/
+* @brief               prints out spacers between rows
+* @author              Joshua Molden
+* @date                3 Nov 21
+* @lastUpdated         4 Nov 21
+* @return              void (prints to command line)
+* @arg                 columnWidth - the width of both columns
+* @note                This method doesn't allow for different width of columns.
+*                      If this is desired, this method will have to be changed.
+*****************************************************************************/
 void spacers(int columnWidth)
 {
         printf("|");
@@ -65,14 +65,14 @@ void spacers(int columnWidth)
 }
 
 /*****************************************************************************
- * @brief               prints out spacers without plus signs in the middle of columns
- * @author              Joshua Molden
- * @date                3 Nov 21
- * @lastUpdated         4 Nov 21
- * @return              void (prints to command line)
- * @arg                 totalWidth - total width of the table.
- * @note                Nothing special about this method
- *****************************************************************************/
+* @brief               prints out spacers without plus signs in the middle of columns
+* @author              Joshua Molden
+* @date                3 Nov 21
+* @lastUpdated         4 Nov 21
+* @return              void (prints to command line)
+* @arg                 totalWidth - total width of the table.
+* @note                Nothing special about this method
+*****************************************************************************/
 void topAndBottom(int totalWidth)
 {
         printf("+");
@@ -84,19 +84,19 @@ void topAndBottom(int totalWidth)
 }
 
 /*****************************************************************************
- * @brief               prints out the data portion of the table
- * @author              Joshua Molden
- * @date                3 Nov 21
- * @lastUpdated         4 Nov 21
- * @return              void (prints to command line)
- * @arg                 data - 2 dimensional array holding data
- *                      columnWidth - the width of both columns. Doesn't allow for different size columns.
- *                                    If desired, changes will need to be made.
- *                      numOfRows - how many rows the table needs to be
- *                      totalWidth - total width of the table
- * @note                This method only allows for tables with two columns, and doesn't take into account if
- *                      numbers are larger than the column headers. If this is desired, changes will need to be made.
- *****************************************************************************/
+* @brief               prints out the data portion of the table
+* @author              Joshua Molden
+* @date                3 Nov 21
+* @lastUpdated         4 Nov 21
+* @return              void (prints to command line)
+* @arg                 data - 2 dimensional array holding data
+*                      columnWidth - the width of both columns. Doesn't allow for different size columns.
+*                                    If desired, changes will need to be made.
+*                      numOfRows - how many rows the table needs to be
+*                      totalWidth - total width of the table
+* @note                This method only allows for tables with two columns, and doesn't take into account if
+*                      numbers are larger than the column headers. If this is desired, changes will need to be made.
+*****************************************************************************/
 void printData(int data[][2], int columnWidth, int numOfRows, int totalWidth)
 {
         // print spacer between column header and first row of data
@@ -187,16 +187,16 @@ void printData(int data[][2], int columnWidth, int numOfRows, int totalWidth)
 }
 
 /*****************************************************************************
- * @brief               prints ascii table with a header, 2 coulmns with fixed sizes
- * @author              Joshua Molden
- * @date                3 Nov 21
- * @lastUpdated         4 Nov 21
- * @return              void (prints to command line)
- * @arg                 data - 2 dimensional array holding data
- *                      numOfRows - number of rows for the data portion of the table
- * @note                This ascii table will only print correctly if the size of the columns are the same. If
- *                      it is desired to be more "flexible," changes will need to be made.
- *****************************************************************************/
+* @brief               prints ascii table with a header, 2 coulmns with fixed sizes
+* @author              Joshua Molden
+* @date                3 Nov 21
+* @lastUpdated         4 Nov 21
+* @return              void (prints to command line)
+* @arg                 data - 2 dimensional array holding data
+*                      numOfRows - number of rows for the data portion of the table
+* @note                This ascii table will only print correctly if the size of the columns are the same. If
+*                      it is desired to be more "flexible," changes will need to be made.
+*****************************************************************************/
 void printTable(int data[][2], int numOfRows, char* tableName)
 {
         // array for header of table. Can replace algorithm name (i.e "FIFO") and it will center itself
@@ -278,19 +278,19 @@ void printTable(int data[][2], int numOfRows, char* tableName)
 }
 
 /*****************************************************************************
- * @brief               simulates FIFO replacement algorithm
- * @author              Joshua Molden
- * @date                5 Nov 21
- * @lastUpdated         6 Nov 21
- * @return              int (0 if page was found, 1 if page was not found and had to be replace a page)
- * @arg                 page - page that is being requested
- *                      maxSizeOfQueue - the maximum size a queue can be
- *                      currentSizeOfQueue - the current size the queue is
- *                      front - the index to the "front" of the queue (item to be removed if page isn't found)
- *                      rear - the index to the "rear" of the queue (item most recently added)
- *                      queue - the queue holding page numbers
- * @note                None
- *****************************************************************************/
+* @brief               simulates FIFO replacement algorithm
+* @author              Joshua Molden
+* @date                5 Nov 21
+* @lastUpdated         6 Nov 21
+* @return              int (0 if page was found, 1 if page was not found and had to be replace a page)
+* @arg                 page - page that is being requested
+*                      maxSizeOfQueue - the maximum size a queue can be
+*                      currentSizeOfQueue - the current size the queue is
+*                      front - the index to the "front" of the queue (item to be removed if page isn't found)
+*                      rear - the index to the "rear" of the queue (item most recently added)
+*                      queue - the queue holding page numbers
+* @note                None
+*****************************************************************************/
 int fifoAlgorithm(int page, int maxSizeOfQueue, int *currentSizeOfQueue, int *front, int *rear, int queue[])
 {
 
@@ -364,18 +364,18 @@ int fifoAlgorithm(int page, int maxSizeOfQueue, int *currentSizeOfQueue, int *fr
 }
 
 /*****************************************************************************
- * @brief               Updates circular frame buffer to next position
- * @author              Dylan Martie
- * @date                5 Nov 21
- * @lastUpdated         5 Nov 21
- * @return              integer
- * @arg                         pointer - the current position of the pointer
+* @brief               Updates circular frame buffer to next position
+* @author              Dylan Martie
+* @date                5 Nov 21
+* @lastUpdated         5 Nov 21
+* @return              integer
+* @arg                         pointer - the current position of the pointer
                                 frameSize - the # of frames in the current cycle
- * @note                Utility function
- *****************************************************************************/
+* @note                Utility function
+*****************************************************************************/
 int updatePointer(int pointer, int frameSize) {
         // Reset pointer back to beginning
-        if ((pointer + 1) >= frameSize){
+        if ((pointer + 1) >= frameSize) {
                 pointer = 0;
         }
         else {
@@ -385,18 +385,106 @@ int updatePointer(int pointer, int frameSize) {
 }
 
 /*****************************************************************************
- * @brief               Simulates clock replacement algorithm
- * @author              Dylan Martie
- * @date                5 Nov 21
- * @lastUpdated         10 Nov 21
- * @return              int (0 if page was found, 1 if page was not found and had to be replace a page)
- * @arg                         pageRequest - page that is being requested
- *                              frameBuffer[] - the predetermined sized array for holder stored frame values
- *                              frameUseBits[] - the predetermined sized array for holding use bit value of each frame
- *                              numFrames - number of frames
- *                              framePointer - Pointer that keeps track of where we are in framebuffer
- * @note                None
- *****************************************************************************/
+* @brief               Predicts frame to replace
+* @author              Andrew Voss
+* @date                11 Nov 21
+* @lastUpdated         11 Nov 21
+* @return              int frameNum
+* @arg                         pageRequest - pages that is being requested
+*                              numOfPages - number of pages
+*                              freq[] - frequency of each request
+*                              frames[] - current frames
+*                              frameSize - size of frames
+*                              index - index of the page request
+* @note                None
+*****************************************************************************/
+int predict(int pageRequest[], int numberOfPages, int freq[], int frames[], int frameSize, int index, int *frameBufferSize){
+        int res = -1;
+        int farthest = index;
+
+        for(int i = 0; i < frameSize; i++) {
+                if(freq[(int) frames[i]] < 1)
+                        return i;
+
+                // Find page that won't be used for the longest time
+                for(int j = index; j < numberOfPages; j++) {
+                        if(pageRequest[j] == frames[i]) {
+                                if(j > farthest) {
+                                        farthest = j;
+                                        res = i;
+                                }
+                                break;
+                        }
+                }
+
+                // replace frame not used in future
+                if(res == -1)
+                        return i;
+
+        }
+
+        return res;
+}
+
+/*****************************************************************************
+* @brief               Simulates optimal replacement algorithm
+* @author              Andrew Voss
+* @date                11 Nov 21
+* @lastUpdated         11 Nov 21
+* @return              int (0 if page was found, 1 if page was not found and had to be replace a page)
+* @arg                         pageRequest[] - pages that are being requested
+*                              numberOfPages - number of pages
+*                              freq[] - frequency of each page
+*                              frames[] - frame buffer
+*                              frameSize - number of element in current frame buffer
+*                              index - index for the page request
+*                              frameBufferSize - size of the frame buffer
+* @note                None
+*****************************************************************************/
+int optimalAlgothrim(int pageRequest[], int numberOfPages, int freq[], int frames[], int frameSize, int index, int *frameBufferSize){
+        int replace = -1;
+        bool pageFound = false;
+
+        // Searches buffer for page
+        for (int k = 0; k < frameSize; k++) {
+                if (frames[k] == pageRequest[index]) {
+                        pageFound = true;
+                        break;
+                }
+        }
+
+
+        freq[pageRequest[index]] -= 1;
+
+        if (!pageFound) {
+                bool pageReplaced = false;
+
+                if(*frameBufferSize < frameSize) {
+                        frames[*frameBufferSize] = pageRequest[index];
+                        *frameBufferSize += 1;
+                } else {
+                  replace = predict(pageRequest, numberOfPages, freq, frames, frameSize, index, frameBufferSize);
+                  if(replace > -1)
+                          frames[replace] = pageRequest[index];
+                }
+        }
+
+        return !pageFound;
+}
+
+/*****************************************************************************
+* @brief               Simulates clock replacement algorithm
+* @author              Dylan Martie
+* @date                5 Nov 21
+* @lastUpdated         10 Nov 21
+* @return              int (0 if page was found, 1 if page was not found and had to be replace a page)
+* @arg                         pageRequest - page that is being requested
+*                              frameBuffer[] - the predetermined sized array for holder stored frame values
+*                              frameUseBits[] - the predetermined sized array for holding use bit value of each frame
+*                              numFrames - number of frames
+*                              framePointer - Pointer that keeps track of where we are in framebuffer
+* @note                None
+*****************************************************************************/
 int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int numFrames, int* framePointer) {
 
         bool pageFound = false;
@@ -447,144 +535,168 @@ int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int n
 }
 
 /*****************************************************************************
- * @brief               prints contents of results array to a file
- * @author              Joshua Molden
- * @date                11 Nov 21
- * @lastUpdated         11 Nov 21
- * @return              void (prints to file)
- * @arg                 results - array holding values to print to file
- *						numOfRows - number of rows to print to file
- *						fileName - the name of the file to create
- * @note                Simulates FIFO replacement algorithm and prints results in ASCII table
- *****************************************************************************/
+* @brief               prints contents of results array to a file
+* @author              Joshua Molden
+* @date                11 Nov 21
+* @lastUpdated         11 Nov 21
+* @return              void (prints to file)
+* @arg                 results - array holding values to print to file
+*						numOfRows - number of rows to print to file
+*						fileName - the name of the file to create
+* @note                Simulates FIFO replacement algorithm and prints results in ASCII table
+*****************************************************************************/
 void printResultsToFile(int results[][2], int numOfRows, char* fileName)
 {
-	FILE *file;
-	file = fopen(fileName, "a");
-	
-	// create "numOfPagesInStreamInt" number of page numbers as ints between 0 and pagesInt
-	for (int i = 0; i <= numOfRows; ++i) {
-		fprintf(file, "%d,", results[i][0]);
-		fprintf(file, "%d\n", results[i][1]);
-	}
+        FILE *file;
+        file = fopen(fileName, "a");
 
-	// close file that was appended to
-	fclose(file);
+        // create "numOfPagesInStreamInt" number of page numbers as ints between 0 and pagesInt
+        for (int i = 0; i <= numOfRows; ++i) {
+                fprintf(file, "%d,", results[i][0]);
+                fprintf(file, "%d\n", results[i][1]);
+        }
+
+        // close file that was appended to
+        fclose(file);
 }
 
 /*****************************************************************************
- * @brief               reads values in from command line, makes random page stream for testing, creates
- *                      data array based on inputed parameters
- * @author              Joshua Molden
- * @date                3 Nov 21
- * @lastUpdated         4 Nov 21
- * @return              int (0 if exited normally, non-zero if issues)
- * @arg                 argc - number of command line arguments passed in, including name of program
- *                      argv - the actual arguments
- *                              argv[0] = name of program
- *                              argv[1] = input file from which page stream should be read from. Need to make this file yet
- *                              argv[2] = minimum number of frames to test replacement algorithm with (always 4 for this assignment)
- *                              argv[3] = maximun number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
- *                              argv[4] = number of pages in process (15, 30, 60 for this assignment)
- * @note                Simulates FIFO replacement algorithm and prints results in ASCII table
- *****************************************************************************/
+* @brief               reads values in from command line, makes random page stream for testing, creates
+*                      data array based on inputed parameters
+* @author              Joshua Molden
+* @date                3 Nov 21
+* @lastUpdated         4 Nov 21
+* @return              int (0 if exited normally, non-zero if issues)
+* @arg                 argc - number of command line arguments passed in, including name of program
+*                      argv - the actual arguments
+*                              argv[0] = name of program
+*                              argv[1] = input file from which page stream should be read from. Need to make this file yet
+*                              argv[2] = minimum number of frames to test replacement algorithm with (always 4 for this assignment)
+*                              argv[3] = maximun number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
+*                              argv[4] = number of pages in process (15, 30, 60 for this assignment)
+* @note                Simulates FIFO replacement algorithm and prints results in ASCII table
+*****************************************************************************/
 int main(int argc, char** argv) {
 
-	// read inputs from command line as strings
-	char* inputFile = argv[1];
-	char* minNumOfFrames = argv[2];
-	char* maxNumOfFrames = argv[3];
-	char* numPagesPerProcess = argv[4];
+        // read inputs from command line as strings
+        char* inputFile = argv[1];
+        char* minNumOfFrames = argv[2];
+        char* maxNumOfFrames = argv[3];
+        char* numPagesPerProcess = argv[4];
 
-	// convert from string to number
-	int minNumOfFramesInt = atoi(minNumOfFrames);
-	int maxNumOfFramesInt = atoi(maxNumOfFrames);
-	int numPagesPerProcessInt = atoi(numPagesPerProcess);
+        // convert from string to number
+        int minNumOfFramesInt = atoi(minNumOfFrames);
+        int maxNumOfFramesInt = atoi(maxNumOfFrames);
+        int numPagesPerProcessInt = atoi(numPagesPerProcess);
 
-	// number of rows of data. Also number of rows of data in ascii table
-	int rows = maxNumOfFramesInt - minNumOfFramesInt;
-	int clockFaults[rows][2];
-	int fifoFaults[rows][2];
+        // number of rows of data. Also number of rows of data in ascii table
+        int rows = maxNumOfFramesInt - minNumOfFramesInt;
+        int clockFaults[rows][2];
+        int fifoFaults[rows][2];
+        int optimalFaults[rows][2];
 
-	// populate from numbers in arrays
-	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; ++i)
-	{
-			// initalize frame values, subtrack "minNumOfFramesInt" in
-			// order to start putting values into array at index 0
-			fifoFaults[i - minNumOfFramesInt][0] = i;
-			clockFaults[i - minNumOfFramesInt][0] = i;
-			// initialize fault values to 0, same reason for subtracking "minNumOfFramesInt"
-			// initialize to 0 because if you don't these cells don't start at 0 by default for some reason
-			fifoFaults[i - minNumOfFramesInt][1] = 0;
-			clockFaults[i - minNumOfFramesInt][1] = 0;
-	}
+        // Read all page requests for Optimal Algothrim
+        int pageRequests[1000];
+        int buff[1];
+        int freq[16];
+        //memset(freq, 0, 1000*sizeof(int));
+        FILE *file = fopen(inputFile, "r");
+        for(int i = 0; i < numPagesPerProcessInt; i++) {
+                fscanf(file, "%d", buff);
+                pageRequests[i] = buff[0];
+                freq[buff[0]] += 1;
+        }
+        fclose(file);
 
-	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; i++)
-	{
-			FILE *file;
-			file = fopen(inputFile, "r");
-			// holds number that is read from file
-			int buff[1];
+        // populate from numbers in arrays
+        for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; ++i)
+        {
+                // initalize frame values, subtrack "minNumOfFramesInt" in
+                // order to start putting values into array at index 0
+                fifoFaults[i - minNumOfFramesInt][0] = i;
+                clockFaults[i - minNumOfFramesInt][0] = i;
+                optimalFaults[i - minNumOfFramesInt][0] = i;
+                // initialize fault values to 0, same reason for subtracking "minNumOfFramesInt"
+                // initialize to 0 because if you don't these cells don't start at 0 by default for some reason
+                fifoFaults[i - minNumOfFramesInt][1] = 0;
+                clockFaults[i - minNumOfFramesInt][1] = 0;
+                optimalFaults[i - minNumOfFramesInt][1] = 0;
+        }
 
-			// not end of file to start
-			int endOfFile = 1;
+        for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; i++)
+        {
+                file = fopen(inputFile, "r");
+                // holds number that is read from file
 
-			// for fifo algorithm
-			int queue[i];
-			int front = -1;
-			int rear = -1;
-			int currentSizeOfQueue = -1;
+                // not end of file to start
+                int endOfFile = 1;
 
-			// for clock algorithm
-			int clockNumFrames = i;
-			// Memset ensures all values initialized to -1
-			int clockFrameBuffer[clockNumFrames];
-			memset(clockFrameBuffer, -1, clockNumFrames*sizeof(int));
-			int clockFrameUseBits[clockNumFrames];
-			memset(clockFrameUseBits, -1, clockNumFrames*sizeof(int));
+                // for fifo algorithm
+                int queue[i];
+                int front = -1;
+                int rear = -1;
+                int currentSizeOfQueue = -1;
 
-			int clockFramePointer = 0;
+                // for clock algorithm
+                int clockNumFrames = i;
+                // Memset ensures all values initialized to -1
+                int clockFrameBuffer[clockNumFrames];
+                memset(clockFrameBuffer, -1, clockNumFrames*sizeof(int));
+                int clockFrameUseBits[clockNumFrames];
+                memset(clockFrameUseBits, -1, clockNumFrames*sizeof(int));
 
-			int fifoNumOfFaults = 0;
-			int clockNumOfFaults = 0;
+                // optimal algothrim
+                int index = 0;
+                int optimalFrameBuffer[i];
+                int bufferSize = 0;
 
-			do
-			{
-					// read int from line. fscanf retruns 0 if successfully read
-					int succRead = fscanf(file, "%d", buff);
-					fifoNumOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
-					clockNumOfFaults += clockAlgorithm(buff[0], clockFrameBuffer, clockFrameUseBits, clockNumFrames, &clockFramePointer);
-			}
-			while (!feof(file));
+                int clockFramePointer = 0;
 
-			fifoFaults[i - 4][1] = fifoNumOfFaults;
-			clockFaults[i - 4][1] = clockNumOfFaults;
-			fclose(file);
-	}
-	
-	/* print to file in order to make it easier to copy to excel spreadsheet
-	
-	char fifoOutput[50], clockOutput[50], optimalOutput[50];
-	strcat(fifoOutput, "fifoOutput");
-	strcat(fifoOutput, maxNumOfFrames);
-	strcat(fifoOutput, ".csv");
-	
-	strcat(clockOutput, "clockOutput");
-	strcat(clockOutput, maxNumOfFrames);
-	strcat(clockOutput, ".csv");
-	
-	//strcat(optimalOutput, "optimalOutput");
-	//strcat(optimalOutput, maxNumOfFrames);
-	//strcat(optimalOutput, ".csv");
-	
-	//printResultsToFile(optimalFaults, rows, optimalOutput);
-	printResultsToFile(fifoFaults, rows, fifoOutput);
-	printResultsToFile(clockFaults, rows, clockOutput);
-	*/
-	
-	//printTable(optimalFaults, rows, "OPT");
-	printTable(fifoFaults, rows, "FIFO");
-	printTable(clockFaults, rows, "CLOCK");
+                int fifoNumOfFaults = 0;
+                int clockNumOfFaults = 0;
+                int optimalNumOfFaults = 0;
 
-	return 0;
+                do
+                {
+                        // read int from line. fscanf retruns 0 if successfully read
+                        int succRead = fscanf(file, "%d", buff);
+                        fifoNumOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
+                        clockNumOfFaults += clockAlgorithm(buff[0], clockFrameBuffer, clockFrameUseBits, clockNumFrames, &clockFramePointer);
+                        optimalNumOfFaults += optimalAlgothrim(pageRequests, numPagesPerProcessInt, freq, optimalFrameBuffer, i, index, &bufferSize);
+                        index++;
+                }
+                while (!feof(file));
+
+                fifoFaults[i - 4][1] = fifoNumOfFaults;
+                clockFaults[i - 4][1] = clockNumOfFaults;
+                optimalFaults[i - 4][1] = optimalNumOfFaults;
+                fclose(file);
+        }
+
+        /* print to file in order to make it easier to copy to excel spreadsheet
+
+           char fifoOutput[50], clockOutput[50], optimalOutput[50];
+           strcat(fifoOutput, "fifoOutput");
+           strcat(fifoOutput, maxNumOfFrames);
+           strcat(fifoOutput, ".csv");
+
+           strcat(clockOutput, "clockOutput");
+           strcat(clockOutput, maxNumOfFrames);
+           strcat(clockOutput, ".csv");
+
+           //strcat(optimalOutput, "optimalOutput");
+           //strcat(optimalOutput, maxNumOfFrames);
+           //strcat(optimalOutput, ".csv");
+
+           //printResultsToFile(optimalFaults, rows, optimalOutput);
+           printResultsToFile(fifoFaults, rows, fifoOutput);
+           printResultsToFile(clockFaults, rows, clockOutput);
+         */
+
+        //printTable(optimalFaults, rows, "OPT");
+        printTable(fifoFaults, rows, "FIFO");
+        printTable(clockFaults, rows, "CLOCK");
+        printTable(optimalFaults, rows, "OPTIMAL");
+
+        return 0;
 }
