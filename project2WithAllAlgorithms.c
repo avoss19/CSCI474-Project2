@@ -543,7 +543,7 @@ int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int n
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
-        printf("\nLRU, page: %$d", page);
+        printf("\nLRU, page: %d", page);
 	// First page; add it to the frame set and return that there was a page fault
 	if (*currentFrameSetSize == 0)
 	{
