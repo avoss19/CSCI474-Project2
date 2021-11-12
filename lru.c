@@ -1,20 +1,18 @@
 /*H**********************************************************************
-* FILENAME : asciiTable.c
+* FILENAME : lru.c
 *
-* DESCRIPTION :
-*       This file prints an ascii table for data in a 2 dimensional array and a specified
-*	number of rows that is taken from the command line
+* DESCRIPTION : Simulates the Least Recently Used page replacement algorithm and prints out an ASCII table
+*				showing the number of frames used and the number of page faults in each round
 *
 * PUBLIC FUNCTIONS :
-*       void 	spacers( int columnWidth )
-*	void	topAndBottom( int totalWidth )
-*	void 	printData( int data[][2], int columnWidth, int numOfRows, int totalWidth )
-*	void 	printTable( int data[][2], int numOfRows )
-*       int     main( int argc, char** argv )
+*       	void 	spacers( int columnWidth )
+*			void	topAndBottom( int totalWidth )
+*			void 	printData( int data[][2], int columnWidth, int numOfRows, int totalWidth )
+*			void 	printTable( int data[][2], int numOfRows )
+*			int		lruAlgorithm( int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
+*       	int     main( int argc, char** argv )
 *
-* NOTES :
-*       This ascii table is not very flexible; if you use it incorrectly,
-*	the table will not print correctly. We can make it more robust if we want to.
+* NOTES :	None
 *
 * AUTHOR :    Meagan Olson and Joshua Molden       START DATE :    3 Nov 21
 *
@@ -22,7 +20,7 @@
 *	1.0.0
 *
 * LAST UPDATED:
-*	4 Nov 21
+*	11 Nov 21
 *H*/
 
 #include <stdio.h>
@@ -279,17 +277,17 @@ void printTable(int data[][2], int numOfRows)
 }
 
 /*****************************************************************************
- * @brief		simulates LRU replacement algorithm
+ * @brief			simulates LRU replacement algorithm
  * @author  		Meagan Olson
  * @date    		10 Nov 21
  * @lastUpdated 	11 Nov 21
  * @return  		int (0 if page was found, 1 if page was not found and a page had to be replaced)
- * @arg			page - page that is being requested
- *			    frameSetSize - the maximum number of frames being used
- *		    	currentFrameSetSize - the current number of frames being used
- *			    frameSet - the set of frames holding page numbers
- *			    timeStamps - an array of times corresponding to the last time each page was recently used
- * @note    	None
+ * @arg				page - page that is being requested
+ *			    	frameSetSize - the maximum number of frames being used
+ *		    		currentFrameSetSize - the current number of frames being used
+ *			    	frameSet - the set of frames holding page numbers
+ *			    	timeStamps - an array of times corresponding to the last time each page was recently used
+ * @note    		None
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
@@ -418,9 +416,9 @@ int main(int argc, char** argv) {
 			// read int from line. fscanf returns 0 if successfully read
 			int succRead = fscanf(file, "%d", buff);
 			numOfFaults += lruAlgorithm(buff[0], i, &currentFrameSetSize, frameSet, timestamps);
+			data[i - 4][1] = numOfFaults;
 		}
 		while (!feof(file));
-		data[i - 4][1] = numOfFaults;
 
 		fclose(file);
 	}
