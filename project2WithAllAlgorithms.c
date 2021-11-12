@@ -543,7 +543,7 @@ int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int n
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
-        printf("\nLRU, page: %d", page);
+        // printf("\nLRU, page: %d", page);
 	// First page; add it to the frame set and return that there was a page fault
 	if (*currentFrameSetSize == 0)
 	{
@@ -552,6 +552,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		frameSet[0] = page;
 		timeStamps[0] = now;
 		*currentFrameSetSize = 1;
+                // printf("First page added at index: 0");
 		return 1;
 	}
 
@@ -563,6 +564,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 			time_t now;
 			time(&now);
 			timeStamps[i] = now;
+                        // printf("\tFound page at index: %d", i);
 			return 0;
 		}
 	}
@@ -570,6 +572,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	// If there is room, load the page into an empty frame
 	if (*currentFrameSetSize < frameSetSize)
 	{
+                // printf("\tLoading page into empty frame at index: %d", *currentFrameSetSize);
 		time_t now;
 		time(&now);
 		frameSet[*currentFrameSetSize] = page;
@@ -596,6 +599,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	}
 
 	// Replace the page at the selected index position
+        // printf("\tReplacing page at index: %d", index);
 	time_t now;
 	time(&now);
 	frameSet[index] = page;
@@ -741,7 +745,7 @@ int main(int argc, char** argv) {
                         int succRead = fscanf(file, "%d", buff);
                         fifoNumOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
                         clockNumOfFaults += clockAlgorithm(buff[0], clockFrameBuffer, clockFrameUseBits, clockNumFrames, &clockFramePointer);
-                        optimalNumOfFaults += optimalAlgothrim(pageRequests, numPagesPerProcessInt, freq, optimalFrameBuffer, i, index, &bufferSize);
+                        // optimalNumOfFaults += optimalAlgothrim(pageRequests, numPagesPerProcessInt, freq, optimalFrameBuffer, i, index, &bufferSize);
 			lruNumOfFaults += lruAlgorithm(buff[0], i, &lruCurrentFrameSetSize, lruFrameSet, lruTimestamps);
                         index++;
                 }
