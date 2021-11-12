@@ -200,7 +200,7 @@ void printData(int data[][2], int columnWidth, int numOfRows, int totalWidth)
 void printTable(int data[][2], int numOfRows)
 {
 	// array for header of table. Can replace algorithm name (i.e "FIFO") and it will center itself
-	char* tableHeader[2] = {"Replacement Algorithm", "FIFO"};
+	char* tableHeader[2] = {"Replacement Algorithm", "LRU"};
 
 	// needed to center the headers dynamically
 	int sizeOfLine1 = strlen(tableHeader[0]);
