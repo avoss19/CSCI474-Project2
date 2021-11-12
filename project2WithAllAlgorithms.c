@@ -543,6 +543,7 @@ int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int n
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
+        printf("\nLRU, page: %$d", page);
 	// First page; add it to the frame set and return that there was a page fault
 	if (*currentFrameSetSize == 0)
 	{
@@ -631,7 +632,7 @@ void printResultsToFile(int results[][2], int numOfRows, char* fileName)
 
 /*****************************************************************************
 * @brief               reads values in from command line, makes random page stream for testing, creates
-*                      data array based on inputed parameters
+*                      data array based on inputted parameters
 * @author              Joshua Molden
 * @date                3 Nov 21
 * @lastUpdated         4 Nov 21
@@ -641,7 +642,7 @@ void printResultsToFile(int results[][2], int numOfRows, char* fileName)
 *                              argv[0] = name of program
 *                              argv[1] = input file from which page stream should be read from. Need to make this file yet
 *                              argv[2] = minimum number of frames to test replacement algorithm with (always 4 for this assignment)
-*                              argv[3] = maximun number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
+*                              argv[3] = maximum number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
 *                              argv[4] = number of pages in process (15, 30, 60 for this assignment)
 * @note                Simulates FIFO replacement algorithm and prints results in ASCII table
 *****************************************************************************/
@@ -681,7 +682,7 @@ int main(int argc, char** argv) {
         // populate from numbers in arrays
         for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; ++i)
         {
-                // initalize frame values, subtrack "minNumOfFramesInt" in
+                // initalize frame values, subtract "minNumOfFramesInt" in
                 // order to start putting values into array at index 0
                 fifoFaults[i - minNumOfFramesInt][0] = i;
                 clockFaults[i - minNumOfFramesInt][0] = i;

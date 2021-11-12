@@ -387,7 +387,7 @@ int main(int argc, char** argv) {
 	// populate from numbers in data array, may delete this later
 	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; ++i) 
 	{
-		// initalize frame values, subtrack "minNumOfFramesInt" in
+		// initalize frame values, subtract "minNumOfFramesInt" in
 		// order to start putting values into array at index 0
 		data[i - minNumOfFramesInt][0] = i;
 		// initialize fault values to 0, same reason for subtracking "minNumOfFramesInt"
