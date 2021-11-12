@@ -300,7 +300,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		frameSet[0] = page;
 		timeStamps[0] = now;
 		*currentFrameSetSize = 1;
-		printf("\n\tAdded page to frame");
+		printf("\t\tAdded");
 		return 1;
 	}
 
@@ -312,7 +312,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 			time_t now;
 			time(&now);
 			timeStamps[*currentFrameSetSize] = now;
-			printf("\n\tFound page in frame");
+			printf("\t\tFound");
 			return 0;
 		}
 	}
@@ -325,7 +325,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		frameSet[*currentFrameSetSize] = page;
 		timeStamps[*currentFrameSetSize] = now;
 		*currentFrameSetSize += 1;
-		printf("\n\tAdded page to frame");
+		printf("\t\tAdded");
 		return 1;
 
 	}
@@ -351,7 +351,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	time(&now);
 	frameSet[index] = page;
 	timeStamps[index] = now;
-	printf("\n\tReplaced page in frame");
+	printf("\t\tReplaced");
 	return 1;
 
 }
