@@ -306,6 +306,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 
 	// Check to see if the page is already loaded into a frame
 	for (int i = 0; i < *currentFrameSetSize; i++) {
+		printf("Page requested: %d\tCompared to page in frame: %d", page, frameSet[i]);
 		if (frameSet[i] == page)
 		{
 			printf("Found page: %d in frame set", page);
