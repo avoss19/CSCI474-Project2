@@ -293,7 +293,7 @@ void printTable(int data[][2], int numOfRows)
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
-	printf("current frame set size: %d\n", *currentFrameSetSize);
+	printf("Page: %d\tCurrent frame size: %d\n", page, *currentFrameSetSize);
 	// First page; add it to the frame set and return that there was a page fault
 	if (*currentFrameSetSize == 0)
 	{
@@ -307,10 +307,9 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 
 	// Check to see if the page is already loaded into a frame
 	for (int i = 0; i < *currentFrameSetSize; i++) {
-		printf("Page requested: %d\tCompared to page in frame: %d", page, frameSet[i]);
 		if (frameSet[i] == page)
 		{
-			printf("Found page: %d in frame set", page);
+			printf("\tFound page: %d in frame set\n", page);
 			// Update the timestamp corresponding to that page
 			time_t now;
 			time(&now);
