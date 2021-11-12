@@ -300,7 +300,11 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		frameSet[0] = page;
 		timeStamps[0] = now;
 		*currentFrameSetSize = 1;
-		if (frameSetSize == 30) printf("\t\tAdded");
+		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", 0);
+			return 0;
+		}
+	}
+);
 		return 1;
 	}
 
@@ -311,8 +315,8 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 			// Update the timestamp corresponding to that page
 			time_t now;
 			time(&now);
-			timeStamps[*currentFrameSetSize] = now;
-			if (frameSetSize == 30) printf("\t\tFound");
+			timeStamps[i] = now;
+			if (frameSetSize == 30) printf("\t\tFound\tIndex: %d", i);
 			return 0;
 		}
 	}
@@ -324,8 +328,8 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		time(&now);
 		frameSet[*currentFrameSetSize] = page;
 		timeStamps[*currentFrameSetSize] = now;
+		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", *currentFrameSetSize);
 		*currentFrameSetSize += 1;
-		if (frameSetSize == 30) printf("\t\tAdded");
 		return 1;
 
 	}
@@ -351,10 +355,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	time(&now);
 	frameSet[index] = page;
 	timeStamps[index] = now;
-	if (frameSetSize == 30)
-	{
-		printf("\t\tReplaced\tO: %d\t1:%d", frameSet[0], frameSet[1]);
-	}
+	if (frameSetSize == 30) printf("\t\tReplaced\tIndex: %d", index);
 	return 1;
 
 }
