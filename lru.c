@@ -330,25 +330,25 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 
 	// Find the least recently used page and replace it
 	int max = 0;
-	time_t now;
-	time(&now);
+	time_t current;
+	time(&current);
 	int index = 0;
 
 	// Find the max time difference between now and the timestamps in the array
 	// Store the index position of the least recently used page in "index"
 	for (int i = 0; i < frameSetSize; i++)
 	{
-		int diff = difftime(timeStamps[i], now);
-		if (diff >= max) continue;
+		int diff = difftime(timeStamps[i], current);
+		if (diff <= max) continue;
 		max = diff;
 		index = i;
 	}
 
 	// Replace the page at the selected index position
-	time_t current;
-	time(&current);
+	time_t now;
+	time(&now);
 	frameSet[index] = page;
-	timeStamps[index] = current;
+	timeStamps[index] = now;
 	return 1;
 
 }
@@ -356,18 +356,18 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 /*****************************************************************************
  * @brief		reads values in from command line, makes random page stream for testing, creates
  *			data array based on inputed parameters
- * @author  		Joshua Molden
+ * @author  		Joshua Molden, Meagan Olson
  * @date    		3 Nov 21
- * @lastUpdated 	4 Nov 21
+ * @lastUpdated 	11 Nov 21
  * @return  		int (0 if exited normally, non-zero if issues)
  * @arg			argc - number of command line arguments passed in, including name of program
  *              	argv - the actual arguments
  *				argv[0] = name of program
  *				argv[1] = input file from which page stream should be read from. Need to make this file yet
  *				argv[2] = minimum number of frames to test replacement algorithm with (always 4 for this assignment)
- *				argv[3] = maximun number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
+ *				argv[3] = maximum number of frames to test replacement algorithm with (15, 30, 60 for this assignment)
  *				argv[4] = number of pages in process (15, 30, 60 for this assignment)
- * @note    		Simulates FIFO replacement algorithm and prints results in ASCII table
+ * @note    		Simulates LRU replacement algorithm and prints results in ASCII table
  *****************************************************************************/
 int main(int argc, char** argv) {
 
@@ -415,7 +415,7 @@ int main(int argc, char** argv) {
 
 		do
 		{
-			// read int from line. fscanf retruns 0 if successfully read
+			// read int from line. fscanf returns 0 if successfully read
 			int succRead = fscanf(file, "%d", buff);
 			numOfFaults += lruAlgorithm(buff[0], i, &currentFrameSetSize, frameSet, timestamps);
 		}
