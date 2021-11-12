@@ -298,8 +298,8 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	{
 		time_t now;
 		time(&now);
-		frameSet[*currentFrameSetSize] = page;
-		timeStamps[*currentFrameSetSize] = now;
+		frameSet[0] = page;
+		timeStamps[0] = now;
 		*currentFrameSetSize++;
 		return 1;
 	}
@@ -308,6 +308,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	for (int i = 0; i < *currentFrameSetSize; i++) {
 		if (frameSet[i] == page)
 		{
+			printf("Found page: %d in frame set", page);
 			// Update the timestamp corresponding to that page
 			time_t now;
 			time(&now);
