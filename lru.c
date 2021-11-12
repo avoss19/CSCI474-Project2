@@ -351,7 +351,10 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	time(&now);
 	frameSet[index] = page;
 	timeStamps[index] = now;
-	if (frameSetSize == 30) printf("\t\tReplaced");
+	if (frameSetSize == 30)
+	{
+		printf("\t\tReplaced\tO: %d\t1:%d", frameSet[0], frameSet[1]);
+	}
 	return 1;
 
 }
@@ -402,7 +405,6 @@ int main(int argc, char** argv) {
 
 	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; i++)
 	{
-		printf("Number of frames: %d", i);
 		FILE *file;
 		file = fopen(inputFile, "r");
 		// holds number that is read from file
