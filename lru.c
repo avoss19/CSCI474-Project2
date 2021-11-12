@@ -301,10 +301,6 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		timeStamps[0] = now;
 		*currentFrameSetSize = 1;
 		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", 0);
-			return 0;
-		}
-	}
-);
 		return 1;
 	}
 
