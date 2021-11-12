@@ -402,6 +402,7 @@ int main(int argc, char** argv) {
 
 	for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; i++)
 	{
+		printf("Number of frames: %d", i);
 		FILE *file;
 		file = fopen(inputFile, "r");
 		// holds number that is read from file
