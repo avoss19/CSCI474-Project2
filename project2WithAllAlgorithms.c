@@ -542,7 +542,6 @@ int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int n
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
-	if (frameSetSize == 30) printf("\nPage requested: %d", page);
 	// First page; add it to the frame set and return that there was a page fault
 	if (*currentFrameSetSize == 0)
 	{
@@ -551,7 +550,6 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		frameSet[0] = page;
 		timeStamps[0] = now;
 		*currentFrameSetSize = 1;
-		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", 0);
 		return 1;
 	}
 
@@ -563,7 +561,6 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 			time_t now;
 			time(&now);
 			timeStamps[i] = now;
-			if (frameSetSize == 30) printf("\t\tFound\tIndex: %d", i);
 			return 0;
 		}
 	}
@@ -575,7 +572,6 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		time(&now);
 		frameSet[*currentFrameSetSize] = page;
 		timeStamps[*currentFrameSetSize] = now;
-		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", *currentFrameSetSize);
 		*currentFrameSetSize += 1;
 		return 1;
 
@@ -602,7 +598,6 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	time(&now);
 	frameSet[index] = page;
 	timeStamps[index] = now;
-	if (frameSetSize == 30) printf("\t\tReplaced\tIndex: %d", index);
 	return 1;
 
 }
