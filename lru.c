@@ -291,6 +291,7 @@ void printTable(int data[][2], int numOfRows)
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
+	printf("\nPage requested: %d", page);
 	// First page; add it to the frame set and return that there was a page fault
 	if (*currentFrameSetSize == 0)
 	{
@@ -299,6 +300,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		frameSet[0] = page;
 		timeStamps[0] = now;
 		*currentFrameSetSize = 1;
+		printf("\n\tAdded page to frame");
 		return 1;
 	}
 
@@ -310,6 +312,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 			time_t now;
 			time(&now);
 			timeStamps[*currentFrameSetSize] = now;
+			printf("\n\tFound page in frame");
 			return 0;
 		}
 	}
@@ -322,6 +325,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		frameSet[*currentFrameSetSize] = page;
 		timeStamps[*currentFrameSetSize] = now;
 		*currentFrameSetSize += 1;
+		printf("\n\tAdded page to frame");
 		return 1;
 
 	}
@@ -347,6 +351,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 	time(&now);
 	frameSet[index] = page;
 	timeStamps[index] = now;
+	printf("\n\tReplaced page in frame");
 	return 1;
 
 }
@@ -416,9 +421,9 @@ int main(int argc, char** argv) {
 			// read int from line. fscanf returns 0 if successfully read
 			int succRead = fscanf(file, "%d", buff);
 			numOfFaults += lruAlgorithm(buff[0], i, &currentFrameSetSize, frameSet, timestamps);
-			data[i - 4][1] = numOfFaults;
 		}
 		while (!feof(file));
+		data[i - 4][1] = numOfFaults;
 
 		fclose(file);
 	}
