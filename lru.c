@@ -293,6 +293,7 @@ void printTable(int data[][2], int numOfRows)
  *****************************************************************************/
 int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
 {
+	printf("current frame set size: %d", *currentFrameSetSize);
 	// First page; add it to the frame set and return that there was a page fault
 	if (*currentFrameSetSize == 0)
 	{
