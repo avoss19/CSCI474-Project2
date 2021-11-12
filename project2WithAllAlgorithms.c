@@ -1,4 +1,4 @@
-~/*H**********************************************************************
+/*H**********************************************************************
  * FILENAME : project2WithAllAlgorithms.c
  *
  * DESCRIPTION :
@@ -22,6 +22,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
+#include <stddef.h>
 
 /*****************************************************************************
 * @brief               prints out spacers between rows
