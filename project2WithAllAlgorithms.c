@@ -1,34 +1,27 @@
-/*H**********************************************************************
- * FILENAME : asciiTable.c
+~/*H**********************************************************************
+ * FILENAME : project2WithAllAlgorithms.c
  *
  * DESCRIPTION :
- *       This file prints an ascii table for data in a 2 dimensional array and a specified
- *       number of rows that is taken from the command line
+ *       This file tests four different page replacement algorithms
  *
- * PUBLIC FUNCTIONS :
- *       void    spacers( int columnWidth )
- *       void    topAndBottom( int totalWidth )
- *       void    printData( int data[][2], int columnWidth, int numOfRows, int totalWidth )
- *       void    printTable( int data[][2], int numOfRows )
- *       int     main( int argc, char** argv )
+ * NOTES : None
  *
- * NOTES :
- *       This ascii table is not very flexible, if you use it incorrectly,
- *       the table will not print correctly. We can make it more robust if we want to.
- *
- * AUTHOR :    Joshua Molden       START DATE :    3 Nov 21
+ * AUTHOR :    Joshua Molden, Andrew Voss, Dylan Martie, Meagan Olson
+ * 
+ * START DATE :    3 Nov 21
  *
  * VERSION:
  *       1.0.0
  *
  * LAST UPDATED:
- *       4 Nov 21
+ *       12 Nov 21
  * H*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 
 /*****************************************************************************
 * @brief               prints out spacers between rows
@@ -535,6 +528,86 @@ int clockAlgorithm(int pageRequest, int frameBuffer[], int frameUseBits[], int n
 }
 
 /*****************************************************************************
+ * @brief			simulates LRU replacement algorithm
+ * @author  		Meagan Olson
+ * @date    		10 Nov 21
+ * @lastUpdated 	11 Nov 21
+ * @return  		int (0 if page was found, 1 if page was not found and a page had to be replaced)
+ * @arg				page - page that is being requested
+ *			    	frameSetSize - the maximum number of frames being used
+ *		    		currentFrameSetSize - the current number of frames being used
+ *			    	frameSet - the set of frames holding page numbers
+ *			    	timeStamps - an array of times corresponding to the last time each page was recently used
+ * @note    		None
+ *****************************************************************************/
+int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frameSet[], time_t timeStamps[])
+{
+	if (frameSetSize == 30) printf("\nPage requested: %d", page);
+	// First page; add it to the frame set and return that there was a page fault
+	if (*currentFrameSetSize == 0)
+	{
+		time_t now;
+		time(&now);
+		frameSet[0] = page;
+		timeStamps[0] = now;
+		*currentFrameSetSize = 1;
+		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", 0);
+		return 1;
+	}
+
+	// Check to see if the page is already loaded into a frame
+	for (int i = 0; i < *currentFrameSetSize; i++) {
+		if (frameSet[i] == page)
+		{
+			// Update the timestamp corresponding to that page
+			time_t now;
+			time(&now);
+			timeStamps[i] = now;
+			if (frameSetSize == 30) printf("\t\tFound\tIndex: %d", i);
+			return 0;
+		}
+	}
+
+	// If there is room, load the page into an empty frame
+	if (*currentFrameSetSize < frameSetSize)
+	{
+		time_t now;
+		time(&now);
+		frameSet[*currentFrameSetSize] = page;
+		timeStamps[*currentFrameSetSize] = now;
+		if (frameSetSize == 30) printf("\t\tAdded\tIndex: %d", *currentFrameSetSize);
+		*currentFrameSetSize += 1;
+		return 1;
+
+	}
+
+	// Find the least recently used page and replace it
+	int max = 0;
+	time_t current;
+	time(&current);
+	int index = 0;
+
+	// Find the max time difference between now and the timestamps in the array
+	// Store the index position of the least recently used page in "index"
+	for (int i = 0; i < frameSetSize; i++)
+	{
+		int diff = difftime(timeStamps[i], current);
+		if (diff <= max) continue;
+		max = diff;
+		index = i;
+	}
+
+	// Replace the page at the selected index position
+	time_t now;
+	time(&now);
+	frameSet[index] = page;
+	timeStamps[index] = now;
+	if (frameSetSize == 30) printf("\t\tReplaced\tIndex: %d", index);
+	return 1;
+
+}
+
+/*****************************************************************************
 * @brief               prints contents of results array to a file
 * @author              Joshua Molden
 * @date                11 Nov 21
@@ -594,8 +667,9 @@ int main(int argc, char** argv) {
         int clockFaults[rows][2];
         int fifoFaults[rows][2];
         int optimalFaults[rows][2];
+        int lruFaults[rows][2];
 
-        // Read all page requests for Optimal Algothrim
+        // Read all page requests for Optimal Algorithm
         int pageRequests[1000];
         int buff[1];
         int freq[16];
@@ -616,11 +690,13 @@ int main(int argc, char** argv) {
                 fifoFaults[i - minNumOfFramesInt][0] = i;
                 clockFaults[i - minNumOfFramesInt][0] = i;
                 optimalFaults[i - minNumOfFramesInt][0] = i;
+                lruFaults[i - minNumOfFramesInt][0] = i;
                 // initialize fault values to 0, same reason for subtracking "minNumOfFramesInt"
                 // initialize to 0 because if you don't these cells don't start at 0 by default for some reason
                 fifoFaults[i - minNumOfFramesInt][1] = 0;
                 clockFaults[i - minNumOfFramesInt][1] = 0;
                 optimalFaults[i - minNumOfFramesInt][1] = 0;
+                lruFaults[i - minNumOfFramesInt][1] = 0;
         }
 
         for (int i = minNumOfFramesInt; i <= maxNumOfFramesInt; i++)
@@ -645,16 +721,22 @@ int main(int argc, char** argv) {
                 int clockFrameUseBits[clockNumFrames];
                 memset(clockFrameUseBits, -1, clockNumFrames*sizeof(int));
 
-                // optimal algothrim
+                // optimal algorithm
                 int index = 0;
                 int optimalFrameBuffer[i];
                 int bufferSize = 0;
 
                 int clockFramePointer = 0;
 
+                // lru algorithm
+                int lruFrameSet[i];
+		time_t lruTimestamps[i];
+		int lruCurrentFrameSetSize = 0;
+
                 int fifoNumOfFaults = 0;
                 int clockNumOfFaults = 0;
                 int optimalNumOfFaults = 0;
+                int lruNumOfFaults = 0;
 
                 do
                 {
@@ -663,6 +745,7 @@ int main(int argc, char** argv) {
                         fifoNumOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
                         clockNumOfFaults += clockAlgorithm(buff[0], clockFrameBuffer, clockFrameUseBits, clockNumFrames, &clockFramePointer);
                         optimalNumOfFaults += optimalAlgothrim(pageRequests, numPagesPerProcessInt, freq, optimalFrameBuffer, i, index, &bufferSize);
+			lruNumOfFaults += lruAlgorithm(buff[0], i, &lruCurrentFrameSetSize, lruFrameSet, lruTimestamps);
                         index++;
                 }
                 while (!feof(file));
@@ -670,12 +753,13 @@ int main(int argc, char** argv) {
                 fifoFaults[i - 4][1] = fifoNumOfFaults;
                 clockFaults[i - 4][1] = clockNumOfFaults;
                 optimalFaults[i - 4][1] = optimalNumOfFaults;
+                lruFaults[i - 4][1] = lruNumOfFaults;
                 fclose(file);
         }
 
         /* print to file in order to make it easier to copy to excel spreadsheet
 
-           char fifoOutput[50], clockOutput[50], optimalOutput[50];
+           char fifoOutput[50], clockOutput[50], optimalOutput[50], lruOutpur[50];
            strcat(fifoOutput, "fifoOutput");
            strcat(fifoOutput, maxNumOfFrames);
            strcat(fifoOutput, ".csv");
@@ -684,19 +768,25 @@ int main(int argc, char** argv) {
            strcat(clockOutput, maxNumOfFrames);
            strcat(clockOutput, ".csv");
 
-           //strcat(optimalOutput, "optimalOutput");
-           //strcat(optimalOutput, maxNumOfFrames);
-           //strcat(optimalOutput, ".csv");
+           strcat(optimalOutput, "optimalOutput");
+           strcat(optimalOutput, maxNumOfFrames);
+           strcat(optimalOutput, ".csv");
 
-           //printResultsToFile(optimalFaults, rows, optimalOutput);
+           strcat(lruOutput, "lruOutput");
+           strcat(lruOutput, maxNumOfFrames);
+           strcat(lruOutput, ".csv");
+
+           printResultsToFile(optimalFaults, rows, optimalOutput);
            printResultsToFile(fifoFaults, rows, fifoOutput);
            printResultsToFile(clockFaults, rows, clockOutput);
+           printResultsToFile(lruFaults, rows, lruOutput);
          */
 
         //printTable(optimalFaults, rows, "OPT");
         printTable(fifoFaults, rows, "FIFO");
         printTable(clockFaults, rows, "CLOCK");
         printTable(optimalFaults, rows, "OPTIMAL");
+        printTable(lruFaults, rows, "LRU");
 
         return 0;
 }
