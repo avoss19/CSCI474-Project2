@@ -326,7 +326,7 @@ int lruAlgorithm(int page, int frameSetSize, int *currentFrameSetSize, int frame
 		time(&now);
 		frameSet[*currentFrameSetSize] = page;
 		timeStamps[*currentFrameSetSize] = now;
-		*currentFrameSetSize++;
+		*currentFrameSetSize += 1;
 		return 1;
 
 	}
