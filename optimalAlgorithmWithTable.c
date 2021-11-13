@@ -322,6 +322,7 @@ int predict(int pageRequest[], int numberOfPages, int freq[], int frames[], int 
 * @note                Calculates # of page faults for each frame amount for Clock Algorithm
 *****************************************************************************/
 int main(int argc, char** argv) {
+        int fileLen = 1000;
 
         // Read inputs from command line as strings
         char* inputFile = argv[1];
@@ -358,14 +359,13 @@ int main(int argc, char** argv) {
                 int framePointer = 0;
                 int numPageFaults = 0;
 
-                int pageRequests[pagesNum];
+                int pageRequests[fileLen];
 
                 int buff[1];
 
                 int freq[maxFrames];
-                //memset(freq, 0, 1000*sizeof(int));
                 FILE *file = fopen(inputFile, "r");
-                for(int i = 0; i < pagesNum; i++) {
+                for(int i = 0; i < fileLen; i++) {
                         fscanf(file, "%d", buff);
                         pageRequests[i] = buff[0];
                         freq[buff[0]] += 1;
@@ -373,7 +373,7 @@ int main(int argc, char** argv) {
                 fclose(file);
 
                 file = fopen(inputFile, "r");
-                for (int j = 0; j < pagesNum; j++) {
+                for (int j = 0; j < fileLen; j++) {
                         bool pageFound = false;
 
                         // Searches buffer for page
