@@ -1,11 +1,7 @@
 Compile instructions:
-In order to compile the files, run:
+In order to compile the file, run:
 
-		gcc fileName.c
-
-As of now, each algorithm is implemented in a separate file. In order to test
-each algorithm, compile each .c file separately and then run it with the same
-input file that holds the simulated page address stream.
+		gcc project2WithAllAlgorithms.c
 
 Run instructions:
 After compilation, you can run the compile program with the command:
@@ -18,3 +14,9 @@ The parameters to this command represent:
 	4		- the minimum number of frames allocated
 	15		- the maximum number of frames allocated
 	15		- the number of pages in the simulated process
+
+***************************** NOTE ***********************************
+We ran into a weird bug where when you run the project2WithAllAlgorithms.c
+file, the first entry on 3 of our tables are incorrect. Along with this the last
+entry on the 3rd table is incorrect.  We were unable to figure out why this is
+occuring. We are all very confused about why it is happening.
