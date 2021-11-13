@@ -7,7 +7,7 @@
  * NOTES : None
  *
  * AUTHOR :    Joshua Molden, Andrew Voss, Dylan Martie, Meagan Olson
- * 
+ *
  * START DATE :    3 Nov 21
  *
  * VERSION:
@@ -658,6 +658,8 @@ int main(int argc, char** argv) {
         char* maxNumOfFrames = argv[3];
         char* numPagesPerProcess = argv[4];
 
+        int fileLen = 1000;
+
         // convert from string to number
         int minNumOfFramesInt = atoi(minNumOfFrames);
         int maxNumOfFramesInt = atoi(maxNumOfFrames);
@@ -671,15 +673,18 @@ int main(int argc, char** argv) {
         int lruFaults[rows][2];
 
         // Read all page requests for Optimal Algorithm
-        int pageRequests[1000];
+        int pageRequests[fileLen];
         int buff[1];
-        int freq[16];
+        int freq[numPagesPerProcessInt];
         //memset(freq, 0, 1000*sizeof(int));
-        FILE *file = fopen(inputFile, "r");
-        for(int i = 0; i < numPagesPerProcessInt; i++) {
+        FILE *file;
+        file = fopen(inputFile, "r");
+        int data;
+        for(int i = 0; i < fileLen; i++) {
                 fscanf(file, "%d", buff);
-                pageRequests[i] = buff[0];
-                freq[buff[0]] += 1;
+                data = buff[0];
+                pageRequests[i] = data;
+                freq[data] += 1;
         }
         fclose(file);
 
@@ -745,8 +750,8 @@ int main(int argc, char** argv) {
                         int succRead = fscanf(file, "%d", buff);
                         fifoNumOfFaults += fifoAlgorithm(buff[0], i, &currentSizeOfQueue, &front, &rear, queue);
                         clockNumOfFaults += clockAlgorithm(buff[0], clockFrameBuffer, clockFrameUseBits, clockNumFrames, &clockFramePointer);
-                        // optimalNumOfFaults += optimalAlgothrim(pageRequests, numPagesPerProcessInt, freq, optimalFrameBuffer, i, index, &bufferSize);
-			lruNumOfFaults += lruAlgorithm(buff[0], i, &lruCurrentFrameSetSize, lruFrameSet, lruTimestamps);
+                        optimalNumOfFaults += optimalAlgothrim(pageRequests, numPagesPerProcessInt, freq, optimalFrameBuffer, i, index, &bufferSize);
+			                     lruNumOfFaults += lruAlgorithm(buff[0], i, &lruCurrentFrameSetSize, lruFrameSet, lruTimestamps);
                         index++;
                 }
                 while (!feof(file));
