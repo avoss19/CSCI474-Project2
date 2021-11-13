@@ -626,7 +626,7 @@ void printResultsToFile(int results[][2], int numOfRows, char* fileName)
 
         // create "numOfPagesInStreamInt" number of page numbers as ints between 0 and pagesInt
         for (int i = 0; i <= numOfRows; ++i) {
-                fprintf(file, "%d,", results[i][0]);
+                fprintf(file, "%d   ", results[i][0]);
                 fprintf(file, "%d\n", results[i][1]);
         }
 
