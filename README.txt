@@ -19,4 +19,6 @@ The parameters to this command represent:
 We ran into a weird bug where when you run the project2WithAllAlgorithms.c
 file, the first entry on 3 of our tables are incorrect. Along with this the last
 entry on the 3rd table is incorrect.  We were unable to figure out why this is
-occuring. We are all very confused about why it is happening.
+occuring. We are all very confused about why it is happening. We had originally
+coded our algorithms in separate files, and when you run them independently, they
+work just fine.
